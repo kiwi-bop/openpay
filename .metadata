@@ -1,0 +1,10 @@
+# This file tracks properties of this Flutter project.
+# Used by Flutter tool to assess capabilities and perform upgrades etc.
+#
+# This file should be version controlled and should not be manually edited.
+
+version:
+  revision: 7d1430ac29852b27b89b1b75312417a0871d0b43
+  channel: bugfix&#x2F;gestureRecognizersLeak
+
+project_type: package

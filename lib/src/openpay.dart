@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-const _sandboxUrl = 'https://sandbox-api.openpay.mx/';
-const _prodUrl = 'https://api.openpay.mx/';
+const _sandboxUrl = 'https://sandbox-api.openpay.mx';
+const _prodUrl = 'https://api.openpay.mx';
 
 /// Openpay instance
 class Openpay {
@@ -19,12 +19,14 @@ class Openpay {
 
   Openpay(this.merchantId, this.apiKey, {this.isSandboxMode = false});
 
-  String get _baseUrl => '${isSandboxMode ? _sandboxUrl : _prodUrl}/v1/$merchantId';
+  String get _merchantBaseUrl => '$baseUrl/v1/$merchantId';
+
+  String get baseUrl => isSandboxMode ? _sandboxUrl : _prodUrl;
 
   /// Create a token from card data
   Future<TokenInfo> createToken(CardInfo card) async {
     String basicAuth = 'Basic ' + base64Encode(utf8.encode('$apiKey:'));
-    Response response = await post('$_baseUrl/tokens', headers: {
+    Response response = await post('$_merchantBaseUrl/tokens', headers: {
       'Content-type': 'application/json',
       'Authorization': basicAuth,
       'Accept': 'application/json',
@@ -35,15 +37,14 @@ class Openpay {
       "expiration_month": "${card.expirationMonth}",
       "cvv2": "${card.cvv2}"
     }""");
-    print(response.request.url);
-    print(response.statusCode);
-    print(response.body);
+
     if (response.statusCode == 201) {
       return TokenInfo._fromBackend(jsonDecode(response.body));
     } else {
       throw Exception('Error ${response.statusCode}, ${response.body}');
     }
   }
+
 }
 
 /// Card data representation class

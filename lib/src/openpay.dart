@@ -26,7 +26,7 @@ class Openpay {
   /// Create a token from card data
   Future<TokenInfo> createToken(CardInfo card) async {
     String basicAuth = 'Basic ' + base64Encode(utf8.encode('$apiKey:'));
-    Response response = await post('$_merchantBaseUrl/tokens', headers: {
+    Response response = await post(Uri.parse('$_merchantBaseUrl/tokens'), headers: {
       'Content-type': 'application/json',
       'Authorization': basicAuth,
       'Accept': 'application/json',
@@ -53,19 +53,20 @@ class CardInfo {
   final String holderName;
   final String expirationYear;
   final String expirationMonth;
-  final String cvv2;
-  final String brand;
-  final String creationDate;
+  final String? cvv2;
+  final String? brand;
+  final String? creationDate;
 
-  CardInfo(this.cardNumber, this.holderName, this.expirationYear, this.expirationMonth, this.cvv2)
+  CardInfo(this.cardNumber, this.holderName, this.expirationYear, this.expirationMonth, String cvv2)
       : brand = null,
-        creationDate = null;
+        creationDate = null,
+        this.cvv2 = cvv2;
 
   CardInfo._({
-    this.cardNumber,
-    this.holderName,
-    this.expirationYear,
-    this.expirationMonth,
+    required this.cardNumber,
+    required this.holderName,
+    required this.expirationYear,
+    required this.expirationMonth,
     this.cvv2,
     this.brand,
     this.creationDate,

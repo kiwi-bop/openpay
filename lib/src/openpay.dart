@@ -2,8 +2,15 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-const _sandboxUrl = 'https://sandbox-api.openpay.mx';
-const _prodUrl = 'https://api.openpay.mx';
+const Map<Country, String> _sandboxUrls = {
+   Country.Mexico: 'https://sandbox-api.openpay.mx',
+   Country.Colombia: 'https://sandbox-api.openpay.co',
+};
+
+const Map<Country, String> _productionUrls = {
+   Country.Mexico: 'https://api.openpay.mx',
+   Country.Colombia: 'https://api.openpay.co',
+};
 
 /// Openpay instance
 class Openpay {
@@ -17,11 +24,14 @@ class Openpay {
   /// Your public API Key
   final String apiKey;
 
-  Openpay(this.merchantId, this.apiKey, {this.isSandboxMode = false});
+  /// Which API endpoint to use.
+  final Country country;
+
+  Openpay(this.merchantId, this.apiKey, {this.isSandboxMode = false, this.country = Country.Mexico });
 
   String get _merchantBaseUrl => '$baseUrl/v1/$merchantId';
 
-  String get baseUrl => isSandboxMode ? _sandboxUrl : _prodUrl;
+  String get baseUrl => isSandboxMode ? _sandboxUrls[this.country]! : _productionUrls[this.country]!;
 
   /// Create a token from card data
   Future<TokenInfo> createToken(CardInfo card) async {
@@ -44,7 +54,10 @@ class Openpay {
       throw Exception('Error ${response.statusCode}, ${response.body}');
     }
   }
+}
 
+enum Country {
+  Mexico, Colombia
 }
 
 /// Card data representation class

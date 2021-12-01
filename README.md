@@ -2,7 +2,7 @@
 
 Openpay dart package.
 
-Only token creation have been implemented here for now.
+Only token creation have been implemented here for now. Supported countries are Mexico and Colombia.
 
 ## Usage
 
@@ -10,7 +10,7 @@ Only token creation have been implemented here for now.
 import 'package:openpay/openpay.dart';
 
 main(List<String> arguments) async {
-  final openpay = Openpay('MERCHANT_ID', 'API_KEY', isSandboxMode: true);
+  final openpay = Openpay('MERCHANT_ID', 'API_KEY', country: Country.Mexico, isSandboxMode: true);
   final token = await openpay.createToken(
                       CardInfo(
                         '4111111111111111', // card number
@@ -24,7 +24,7 @@ main(List<String> arguments) async {
 }
 ``` 
 
-## Getting Started with flutter
+## Getting Started with Flutter
 
 This project is a starting point for a Dart
 [package](https://flutter.dev/developing-packages/),
